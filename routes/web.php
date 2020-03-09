@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+/* WALLETS */
+Route::resource('wallets', 'WalletController')->only(['index', 'create', 'store']);
+
+// Route::prefix('wallets')->group(function () {
+// });
+
+
