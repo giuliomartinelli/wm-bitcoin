@@ -12,6 +12,6 @@ class Wallet extends Model
      * @var array
      */
     protected $fillable = [
-        'public_key', 'private_key'
+        'public_key'
     ];
 }

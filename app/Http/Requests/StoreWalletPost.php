@@ -25,9 +25,6 @@ class StoreWalletPost extends FormRequest
     {
         return [
             'public_key' => 'required|unique:wallets|max:34',
-            'private_key' => 'required|unique:wallets|max:52',
         ];
     }
-
-
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Wallet;
+use Blockchain\Blockchain;
 use Illuminate\Http\Request;
 
 use App\Services\Wallet\Service;
@@ -15,9 +16,31 @@ class WalletController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Wallet $wallet)
+    public function index(Wallet $wallet, Service $walletService)
     {
-        return view('wallets.index',['wallets' => $wallet->paginate(10)]);
+        //$wallet->getWallet("1AtobE3XqCPS3Qk8vA8nY6xBzhR8TkTXSX");
+
+        $items = $wallet->paginate(10)->items();
+        $links = $wallet->paginate(10)->links();
+
+        $total = 0;
+        $its = [];
+
+        foreach ($items as $item) {
+            $total = $total + $walletService->getTotalWallet($item->public_key);
+            $its[] = (object) [
+                "id" => $item->id,
+                "public_key" => $item->public_key,
+                "total" => $walletService->getTotalWallet($item->public_key)
+            ];
+        }
+
+        return view('wallets.index',
+            [
+                'wallets' => (object) $its,
+                'pagination' => $links,
+                'total' => $total
+            ]);
     }
 
     /**
@@ -39,7 +62,6 @@ class WalletController extends Controller
     public function store(Service $wallet, StoreWalletPost $request)
     {
         $wallet->setPublicKey($request->get('public_key'));
-        $wallet->setPrivateKey($request->get('private_key'));
         $wallet->save();
 
         if ($wallet->wasSaved()) {
