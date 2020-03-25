@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Wallet;
-use Blockchain\Blockchain;
+//use Blockchain\Blockchain;
 use Illuminate\Http\Request;
 
 use App\Services\Wallet\Service;
@@ -27,7 +27,10 @@ class WalletController extends Controller
         $its = [];
 
         foreach ($items as $item) {
-            $total = $total + $walletService->getTotalWallet($item->public_key);
+            if (is_numeric($walletService->getTotalWallet($item->public_key))) {
+                $total = $total + $walletService->getTotalWallet($item->public_key);
+            }
+        
             $its[] = (object) [
                 "id" => $item->id,
                 "public_key" => $item->public_key,

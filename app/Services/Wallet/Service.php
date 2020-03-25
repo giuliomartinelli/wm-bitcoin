@@ -71,15 +71,23 @@ class Service
     
     public function getWallet($publicKey)
     {
-        $address = $this->blockchain->Explorer->getHash160Address($publicKey);
-        return $address->final_balance;
+        try {
+            $address = $this->blockchain->Explorer->getHash160Address($publicKey);
+            return $address->final_balance;
+        } catch (\Exception $e) {
+            return 'INVALID ADDRESS';
+        }
     }
 
 
     public function getTotalWallet($publicKey)
     {
-        $address = $this->blockchain->Explorer->getHash160Address($publicKey);
-        return $address->final_balance;
+        try {
+            $address = $this->blockchain->Explorer->getHash160Address($publicKey);
+            return $address->final_balance;
+        } catch (\Exception $e) {
+            return 'INVALID ADDRESS';
+        }
     }
 
 }

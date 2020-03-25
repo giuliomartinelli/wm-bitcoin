@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\BlockchainValidAddress;
 
 class StoreWalletPost extends FormRequest
 {
@@ -24,7 +25,7 @@ class StoreWalletPost extends FormRequest
     public function rules()
     {
         return [
-            'public_key' => 'required|unique:wallets|max:34',
+            'public_key' => ['required', 'unique:wallets', 'max:34', 'min:34', new BlockchainValidAddress()]
         ];
     }
 }
