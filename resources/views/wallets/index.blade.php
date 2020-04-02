@@ -14,11 +14,13 @@
         </thead>
         <tbody>
         @foreach($wallets as $wallet)
-            <tr>
+
+            <tr class="{{ $wallet->total == 'INVALID ADDRESS' ? 'text-danger' : '' }}">
                 <td> {{$wallet->id}} </td>
                 <td> {{$wallet->public_key}} </td>
                 <td> {{$wallet->total}} </td>
             </tr>
+
         @endforeach
         </tbody>
 
