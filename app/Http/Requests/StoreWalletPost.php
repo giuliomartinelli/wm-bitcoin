@@ -25,7 +25,8 @@ class StoreWalletPost extends FormRequest
     public function rules()
     {
         return [
-            'public_key' => ['required', 'unique:wallets', 'max:34', 'min:34', new BlockchainValidAddress()]
+            'public_key' => ['required', 'unique:wallets', 'max:34', 'min:34', new BlockchainValidAddress()],
+            'name' => ['required', 'max:32', 'min:1']
         ];
     }
 }

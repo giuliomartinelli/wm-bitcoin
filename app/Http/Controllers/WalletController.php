@@ -30,9 +30,9 @@ class WalletController extends Controller
             if (is_numeric($walletService->getTotalWallet($item->public_key))) {
                 $total = $total + $walletService->getTotalWallet($item->public_key);
             }
-        
             $its[] = (object) [
                 "id" => $item->id,
+                "name" => $item->name,
                 "public_key" => $item->public_key,
                 "total" => $walletService->getTotalWallet($item->public_key)
             ];
@@ -65,6 +65,7 @@ class WalletController extends Controller
     public function store(Service $wallet, StoreWalletPost $request)
     {
         $wallet->setPublicKey($request->get('public_key'));
+        $wallet->setName($request->get('name'));
         $wallet->save();
 
         if ($wallet->wasSaved()) {

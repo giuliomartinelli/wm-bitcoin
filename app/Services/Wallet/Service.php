@@ -10,6 +10,7 @@ class Service
     private $wallet;
     private $blockchain;
     private $publicKey;
+    private $name;
     
     private $wasSaved;
     
@@ -30,6 +31,16 @@ class Service
         $this->publicKey = $publicKey;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
     public function save()
     {
         $validated = $this->validateFields();
@@ -41,6 +52,7 @@ class Service
         }
         
         $this->wallet->public_key  = $this->publicKey;
+        $this->wallet->name        = $this->name;
         $save = $this->wallet->save();
 
         if($save) {
