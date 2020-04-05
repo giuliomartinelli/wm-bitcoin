@@ -9,8 +9,10 @@ class Service
 {
     private $wallet;
     private $blockchain;
+    private $id;
     private $publicKey;
     private $name;
+
     
     private $wasSaved;
     
@@ -20,6 +22,15 @@ class Service
         $this->blockchain = $blockchain;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     
     public function getPublicKey()
     {
@@ -66,6 +77,13 @@ class Service
     public function wasSaved()
     {
         return $this->wasSaved;
+    }
+
+    public function delete()
+    {
+        $wallet = $this->wallet->find($this->id);
+        $wallet->delete();
+        return;
     }
 
     public function validateFields()

@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 
 /* WALLETS */
-Route::resource('wallets', 'WalletController')->only(['index', 'create', 'store']);
+Route::resource('wallets', 'WalletController')->only(['index', 'create', 'store','destroy']);
 
 // Route::prefix('wallets')->group(function () {
 // });

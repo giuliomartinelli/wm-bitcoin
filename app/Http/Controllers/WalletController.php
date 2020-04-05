@@ -7,6 +7,7 @@ use App\Wallet;
 use Illuminate\Http\Request;
 
 use App\Services\Wallet\Service;
+use App\Services\CoinMarketCap\Service as CoinMarketCapService;
 use App\Http\Requests\StoreWalletPost;
 
 class WalletController extends Controller
@@ -16,8 +17,21 @@ class WalletController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Wallet $wallet, Service $walletService)
+    public function index(Wallet $wallet, Service $walletService, CoinMarketCapService $coinMarketCapService)
     {
+
+        $coin1 = $coinMarketCapService->factory();
+        $coin1->setSymbol("BTC");
+        $coin1->setConvert("BRL");
+        $brl = $coin1->cryptocurrencyQuotesLatest();
+
+        // $coin2 = $coinMarketCapService->factory();
+        // $coin2->setSymbol("BTC");
+        // $coin2->setConvert("USD");
+        // $usd = $coin2->cryptocurrencyQuotesLatest();
+        //,$usd["data"]["BTC"]["quote"]["USD"]["price"]
+        $brl = $brl["data"]["BTC"]["quote"]["BRL"]["price"];
+        
         //$wallet->getWallet("1AtobE3XqCPS3Qk8vA8nY6xBzhR8TkTXSX");
 
         $items = $wallet->paginate(10)->items();
@@ -42,7 +56,9 @@ class WalletController extends Controller
             [
                 'wallets' => (object) $its,
                 'pagination' => $links,
-                'total' => $total
+                'brl' => $brl,
+                'total' => $total,
+                'totalBrl' => $brl * $total,
             ]);
     }
 
@@ -115,8 +131,10 @@ class WalletController extends Controller
      * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Wallet $wallet)
+    public function destroy(Request $request, Service $wallet)
     {
-        dd('destroy');
+        $wallet->setId($request->wallet);
+        $wallet->delete();
+        return redirect()->route('wallets.index')->withSuccess(['Wallet successfully Deleted']);
     }
 }

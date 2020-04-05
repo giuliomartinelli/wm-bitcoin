@@ -12,6 +12,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Public Key</th>
                 <th scope="col">$$</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -19,9 +20,18 @@
 
             <tr class="{{ $wallet->total == 'INVALID ADDRESS' ? 'text-danger' : '' }}">
                 <td> {{$wallet->id}} </td>
-                <td> {{$wallet->name}} </td>
-                <td> {{$wallet->public_key}} </td>
-                <td> {{$wallet->total}} </td>
+                <td> <nobr>{{$wallet->name}}</nobr> </td>
+                <td> <nobr>{{$wallet->public_key}}</nobr> </td>
+                <td> <nobr>{{$wallet->total}}</nobr> </td>
+                <td> 
+                    @if($wallet->total == 'INVALID ADDRESS')
+                    <form action="{{route('wallets.destroy', ['wallet'=>$wallet->id] )}}" method="POST" >
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">DELETE</button>
+                    </form>
+                    @endif
+                </td>
             </tr>
 
         @endforeach
@@ -32,12 +42,20 @@
             <tr>
                 <td>  </td>
                 <td>  </td>
-                <td> <h4>TOTAL<br>{{ $total != 0 ? $total : "0.00000000" }}</h4> </td>
+                <td>  </td>
+                <td>
+                    <nobr><strong>BTC</strong> {{ $total != 0 ? $total : "0.00000000" }}</nobr><br>
+                    <nobr><strong>BRL</strong> {{ $totalBrl != 0 ? $totalBrl : "0.00000000" }}</nobr>
+                </td>
+                <td>  </td>
+
             </tr>
         
         </tfooter>
 
     </table>
+
+    <h4>BRL: {{ $brl }}</h4>
     @else
     <p>not found wallets</p>
     @endif
