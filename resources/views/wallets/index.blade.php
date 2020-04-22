@@ -46,6 +46,7 @@
                 <td>
                     <nobr><strong>BTC</strong> {{ $total != 0 ? $total : "0.00000000" }}</nobr><br>
                     <nobr><strong>BRL</strong> {{ $totalBrl != 0 ? $totalBrl : "0.00000000" }}</nobr>
+                    <nobr><strong>USD</strong> {{ $totalUsd != 0 ? $totalUsd : "0.00000000" }}</nobr>
                 </td>
                 <td>  </td>
 

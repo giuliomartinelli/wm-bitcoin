@@ -16,10 +16,11 @@ class WalletService
     
     private $wasSaved;
     
-    public function __construct(WalletModel $wallet,Blockchain $blockchain)
+    public function __construct()
     {
-        $this->wallet     = $wallet;
-        $this->blockchain = $blockchain;
+
+        $this->wallet     = new WalletModel();
+        $this->blockchain =  new Blockchain();
     }
 
     public function getId()
@@ -62,8 +63,11 @@ class WalletService
             return ;
         }
         
-        $this->wallet->public_key  = $this->publicKey;
-        $this->wallet->name        = $this->name;
+        $address = $this->blockchain->Explorer->getHash160Address($this->publicKey);
+
+        $this->wallet->public_key    = $this->publicKey;
+        $this->wallet->name          = $this->name;
+        $this->wallet->final_balance = $address->final_balance;
         $save = $this->wallet->save();
 
         if($save) {
@@ -97,7 +101,6 @@ class WalletService
         return $validate;
 
     }
-
     
     public function getWallet($publicKey = '')
     {
@@ -131,15 +134,29 @@ class WalletService
         }
     }
 
-
-    // public function getTotalWallet($publicKey)
-    // {
-    //     try {
-    //         $address = $this->blockchain->Explorer->getHash160Address($publicKey);
-    //         return $address->final_balance;
-    //     } catch (\Exception $e) {
-    //         return 'INVALID ADDRESS';
-    //     }
-    // }
+    public function updateWalletsFinalBalance()
+    {
+        
+        $items = $this->wallet->all();
+        foreach($items as $item) {
+            try {
+                $address = $this->blockchain->Explorer->getHash160Address($item->public_key);
+                if ($item->final_balance != $address->final_balance) {
+                    $item->final_balance = $address->final_balance;
+                    $item->save();
+                }
+                
+            } catch (\Exception $e) {
+                $status       = 'error';
+                $msg          = 'INVALID ADDRESS';
+                return  $object[] = (object) [
+                    "status"       => $status,
+                    "msg"          => $msg,
+                    "publicKey"    => $publicKey
+                ];
+            }
+        
+        }
+    }
 
 }

@@ -14,14 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('wallets');
 });
 
 
 /* WALLETS */
 Route::resource('wallets', 'WalletController')->only(['index', 'create', 'store','destroy']);
-
-// Route::prefix('wallets')->group(function () {
-// });
-
-

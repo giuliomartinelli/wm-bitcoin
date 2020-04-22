@@ -36,32 +36,29 @@ class WalletController extends Controller
         $items = $wallet->paginate(10)->items();
         $links = $wallet->paginate(10)->links();
 
-        $balanceWallets = 0.00000000;
+        $totalFinalBalance = 0.00000000;
         $its = [];
+        
         foreach ($items as $item) {
-            $wallet = $walletService->getWallet($item->public_key);
-            if($wallet->status == 'success') {
-                $balanceWallets = $balanceWallets + $wallet->finalBalance;
-            } 
-
+            $totalFinalBalance = $totalFinalBalance + $item->final_balance;
             $its[] = (object) [
                 "id"           => $item->id,
                 "name"         => $item->name,
                 "public_key"   => $item->public_key,
-                "finalBalance" => $wallet->finalBalance,
-                "status"       => $wallet->status,
-                "msg"          => $wallet->msg,
+                "finalBalance" => $item->final_balance,
+                "status"       => 'success',
+                "msg"          => 'success',
             ];
         }
-
         return view('wallets.index',
             [
                 'wallets' => (object) $its,
                 'pagination' => $links,
-                'brl' => $brl,
-                'usd' => $usd,
-                'total' => $balanceWallets,
-                'totalBrl' => $brl * $balanceWallets,
+                'brl' => number_format($brl,2,",","."),
+                'usd' =>   number_format($usd,2,",","."),
+                'total' => number_format($totalFinalBalance,2,",","."),
+                'totalBrl' => number_format($brl * $totalFinalBalance,2,",","."),
+                'totalUsd' => number_format($usd * $totalFinalBalance,2,",","."),
             ]);
     }
 
