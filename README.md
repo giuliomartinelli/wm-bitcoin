@@ -57,7 +57,7 @@ XML PHP Extension
 </p>
 
 ~~~
-git@github.com:giuliomartinelli/wm.git
+git@github.com:giuliomartinelli/wm-bitcoin
 ~~~
 
 <p>
@@ -68,7 +68,7 @@ https
 </p>
 
 ~~~
-https://github.com/giuliomartinelli/wm.git
+https://github.com/giuliomartinelli/wm-bitcoin
 ~~~
 
 <p>
