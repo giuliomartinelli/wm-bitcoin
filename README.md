@@ -1,10 +1,13 @@
 ## Wallet Monitor
 
 ### Qual a proposta ?
+
 <p>
 Um código simples escrito em Laravel para monitorar carteiras bitcoins.
 </p>
+
 ### Requisitos
+
 <p>
 PHP      >=   7.2.5
 </p>
@@ -17,7 +20,9 @@ NPM      =>   6.13.4
 <p>
 Composer =>   1.10.1
 </p>
+
 #### Extensões PHP
+
 <p>
 BCMath PHP Extension
 </p>
@@ -50,21 +55,26 @@ XML PHP Extension
 
 <p>ssh
 </p>
+
 ~~~
 git@github.com:giuliomartinelli/wm.git
 ~~~
+
 <p>
 ou
 </p>
 <p>
 https
 </p>
+
 ~~~
 https://github.com/giuliomartinelli/wm.git
 ~~~
+
 <p>
 Dentro da pasta do projeto na raiz executar os seguintes comandos.
 </p>
+
 ~~~
 composer install
 ~~~
