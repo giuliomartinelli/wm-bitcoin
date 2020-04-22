@@ -5,7 +5,7 @@ namespace App\Services\Wallet;
 use App\Wallet as WalletModel;
 use Blockchain\Blockchain;
 
-class Service
+class WalletService
 {
     private $wallet;
     private $blockchain;
@@ -99,25 +99,47 @@ class Service
     }
 
     
-    public function getWallet($publicKey)
+    public function getWallet($publicKey = '')
     {
+        $finalBalance = 0.00000000;
+        $status       = '';
+        $msg          = '';
+
         try {
             $address = $this->blockchain->Explorer->getHash160Address($publicKey);
-            return $address->final_balance;
+            $finalBalance = $address->final_balance;
+            $status       = 'success';
+            $msg          = 'success';
+            
+            return  $object[] = (object) [
+                "status"       => $status,
+                "finalBalance" => $finalBalance,
+                "msg"          => $msg,
+                "publicKey"    => $publicKey
+            ];
+            
         } catch (\Exception $e) {
-            return 'INVALID ADDRESS';
+            $status       = 'error';
+            $msg          = 'INVALID ADDRESS';
+        
+            return  $object[] = (object) [
+                "status"       => $status,
+                "finalBalance" => $finalBalance,
+                "msg"          => $msg,
+                "publicKey"    => $publicKey
+            ];
         }
     }
 
 
-    public function getTotalWallet($publicKey)
-    {
-        try {
-            $address = $this->blockchain->Explorer->getHash160Address($publicKey);
-            return $address->final_balance;
-        } catch (\Exception $e) {
-            return 'INVALID ADDRESS';
-        }
-    }
+    // public function getTotalWallet($publicKey)
+    // {
+    //     try {
+    //         $address = $this->blockchain->Explorer->getHash160Address($publicKey);
+    //         return $address->final_balance;
+    //     } catch (\Exception $e) {
+    //         return 'INVALID ADDRESS';
+    //     }
+    // }
 
 }

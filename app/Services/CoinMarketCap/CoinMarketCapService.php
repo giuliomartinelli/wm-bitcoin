@@ -3,7 +3,7 @@
 namespace App\Services\CoinMarketCap;
 use Illuminate\Support\Facades\Http;
 
-class Service
+class CoinMarketCapService
 {
     private $symbol;
     private $convert;

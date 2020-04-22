@@ -18,13 +18,13 @@
         <tbody>
         @foreach($wallets as $wallet)
 
-            <tr class="{{ $wallet->total == 'INVALID ADDRESS' ? 'text-danger' : '' }}">
+            <tr class="{{ $wallet->status == 'error' ? 'text-danger' : '' }}">
                 <td> {{$wallet->id}} </td>
                 <td> <nobr>{{$wallet->name}}</nobr> </td>
                 <td> <nobr>{{$wallet->public_key}}</nobr> </td>
-                <td> <nobr>{{$wallet->total}}</nobr> </td>
+                <td> <nobr> {{ $wallet->status == 'error' ? $wallet->msg : $wallet->finalBalance }}</nobr> </td>
                 <td> 
-                    @if($wallet->total == 'INVALID ADDRESS')
+                    @if($wallet->status == 'error')
                     <form action="{{route('wallets.destroy', ['wallet'=>$wallet->id] )}}" method="POST" >
                         @csrf
                         @method('DELETE')
@@ -56,6 +56,7 @@
     </table>
 
     <h4>BRL: {{ $brl }}</h4>
+    <h4>USD: {{ $usd }}</h4>
     @else
     <p>not found wallets</p>
     @endif
@@ -64,4 +65,9 @@
     {!! $pagination !!}
     </div>
     </div>
+
+
+
+
+   
 @endsection
