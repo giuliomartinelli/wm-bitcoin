@@ -131,7 +131,7 @@ class WalletController extends Controller
      * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Service $wallet)
+    public function destroy(Request $request, WalletService $wallet)
     {
         $wallet->setId($request->wallet);
         $wallet->delete();

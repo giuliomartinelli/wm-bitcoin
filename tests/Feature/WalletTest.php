@@ -5,16 +5,40 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
+use Illuminate\Support\Facades\DB;
 use App\Wallet;
 
-class StoreWalletPostTest extends TestCase
+class WalletTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
+    public function testIndexWalletPost()
+    {
+        $this->withoutExceptionHandling();
+
+        DB::table('currencies')->insert([
+            'from'  => 'BTC',
+            'to'    => 'BRL',
+            'price' => 0,
+        ]);
+
+        DB::table('currencies')->insert([
+            'from'  => 'BTC',
+            'to'    => 'USD',
+            'price' => 0,
+        ]);
+       
+        // $this->artisan('currency:update');
+        // $this->artisan('wallet:update');
+        // $this->assertTrue(class_exists(\App\Console\Commands\CurrencyUpdate::class));
+        // $this->assertTrue(class_exists(\App\Console\Commands\WalletsUpdate::class));
+
+        $response = $this->get('/wallets');
+
+        $response->assertOk();
+    }
+
     public function testStoreWalletPost()
     {
         $this->withoutExceptionHandling();
@@ -25,6 +49,8 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $this->assertCount(1, Wallet::all());
+
+        $response->assertRedirect('/wallets');
     }
 
     public function testStoreWalletPostPublicKeyRequired()
@@ -35,6 +61,7 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('public_key');
+    
     }
 
     public function testStoreWalletPostPublicKeyUnique()
@@ -50,6 +77,7 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('public_key');
+
     }
 
     public function testStoreWalletPostPublicKeyMin34()
@@ -60,6 +88,7 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('public_key');
+
     }
 
     public function testStoreWalletPostPublicKeyMax34()
@@ -70,6 +99,7 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('public_key');
+
     }
 
     public function testStoreWalletPostPublicKeyIsValidAddress()
@@ -80,9 +110,8 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('public_key');
+
     }
-
-
 
     public function testStoreWalletPostNameRequired()
     {
@@ -93,8 +122,8 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('name');
-    }
 
+    }
 
     public function testStoreWalletPostNameMax32()
     {
@@ -104,6 +133,27 @@ class StoreWalletPostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('name');
+
+    }
+
+    public function testDestroyWalletDelete()
+    {
+        $this->withoutExceptionHandling();
+
+        $response = $this->post('/wallets',[
+            "public_key" => "3FkenCiXpSLqD8L79intRNXUgjRoH9sjXa",
+            "name" => "test nome"
+        ]);
+
+        $this->assertCount(1, Wallet::all());
+
+        $wallet = Wallet::first();
+
+        $response = $this->delete('/wallets/' . $wallet->id);
+
+        $this->assertCount(0, Wallet::all());
+
+        $response->assertRedirect('/wallets');
     }
 
 }
