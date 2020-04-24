@@ -75,6 +75,10 @@ https://github.com/giuliomartinelli/wm-bitcoin
 Dentro da pasta do projeto na raiz executar os seguintes comandos.
 </p>
 
+<p>
+configure o .env do projeto 
+</p>
+
 ~~~
 composer install
 ~~~
@@ -82,7 +86,7 @@ composer install
 npm install
 ~~~
 ~~~
-configure o .env do projeto 
+php artisan key:generate 
 ~~~
 ~~~
 php artisan migrate
