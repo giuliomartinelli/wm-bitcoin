@@ -78,6 +78,7 @@ Dentro da pasta do projeto na raiz executar os seguintes comandos.
 <p>
 configure o .env do projeto 
 </p>
+
 ~~~
 composer install
 ~~~
